@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -11,6 +12,7 @@ const LoginForm = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const { data, updateData } = useContext(UserContext);
   const snackbarRef = useRef(null);
+  const navigate = useNavigate();
 
   async function postData() {
     const myHeaders = new Headers();
@@ -36,6 +38,7 @@ const LoginForm = () => {
       console.log(result);
       if (response.ok) {
         snackbarRef.current.openSnackbar("User added!", "success");
+        navigate("/todos");
       } else {
         snackbarRef.current.openSnackbar("Error adding user", "error");
       }
@@ -62,6 +65,7 @@ const LoginForm = () => {
         snackbarRef.current.openSnackbar("User found", "success");
         updateData(result);
         console.log(data);
+        navigate("/todos");
       } else {
         snackbarRef.current.openSnackbar("User not found", "error");
         postData();
