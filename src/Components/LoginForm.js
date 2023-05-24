@@ -1,14 +1,76 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import SnackBarComponent from "./SnackBarComponent";
 import { SnackbarSeverity } from "../Const/SnackbarSeverity";
+import { UserContext } from "../Contexts/UserContext";
 
 const LoginForm = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const { data, updateData } = useContext(UserContext);
   const snackbarRef = useRef(null);
+
+  async function postData() {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      name: username,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/person",
+        requestOptions
+      );
+      const result = await response.text();
+      console.log(result);
+      if (response.ok) {
+        snackbarRef.current.openSnackbar("User added!", "success");
+      } else {
+        snackbarRef.current.openSnackbar("Error adding user", "error");
+      }
+    } catch (error) {
+      console.log("error", error);
+      snackbarRef.current.openSnackbar("Error occurred", "error");
+    }
+  }
+
+  async function fetchPersonByName(name) {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/person/getByName/${name}`,
+        requestOptions
+      );
+      const result = await response.text();
+      console.log(result);
+      if (response.ok) {
+        snackbarRef.current.openSnackbar("User found", "success");
+        updateData(result);
+        console.log(data);
+      } else {
+        snackbarRef.current.openSnackbar("User not found", "error");
+        postData();
+      }
+    } catch (error) {
+      console.log("error", error);
+      snackbarRef.current.openSnackbar("Error occurred", "error");
+    }
+  }
 
   const handleOpenSnackbar = (message) => {
     setSnackbarMessage(message);
@@ -46,11 +108,9 @@ const LoginForm = () => {
     } else {
       snackbarRef.current.openSnackbar("Username ok", "success");
     }
-  };
 
-  // const handleButtonClick = () => {
-  //   snackbarRef.current.openSnackbar("Hello Snackbar!", "success");
-  // };
+    fetchPersonByName(username);
+  };
 
   return (
     <>
