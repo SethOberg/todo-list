@@ -34,7 +34,7 @@ const LoginForm = () => {
         "http://localhost:8080/person",
         requestOptions
       );
-      const result = await response.text();
+      const result = await response.json();
       console.log(result);
       if (response.ok) {
         snackbarRef.current.openSnackbar("User added!", "success");
@@ -59,7 +59,7 @@ const LoginForm = () => {
         `http://localhost:8080/person/getByName/${name}`,
         requestOptions
       );
-      const result = await response.text();
+      const result = await response.json();
       console.log(result);
       if (response.ok) {
         snackbarRef.current.openSnackbar("User found", "success");

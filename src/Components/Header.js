@@ -11,6 +11,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import Divider from "@mui/material/Divider";
+import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
 const Header = () => {
@@ -22,6 +24,10 @@ const Header = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const logOutUser = () => {
+    console.log("Log out user here");
   };
 
   return (
@@ -52,6 +58,15 @@ const Header = () => {
           </MenuItem>
           <MenuItem onClick={handleMenuClose} component={Link} to="/todos">
             Todo lists
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose} component={Link} to="/profile">
+            Profile
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={handleMenuClose}>
+            <Button variant="contained" color="primary" onClick={logOutUser}>
+              Log out
+            </Button>
           </MenuItem>
         </Menu>
       </Toolbar>

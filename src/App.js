@@ -5,6 +5,7 @@ import SignUpPage from "./Pages/SignUpPage";
 import TodolistPage from "./Pages/TodolistPage";
 import Header from "./Components/Header";
 import { UserContextProvider } from "./Contexts/UserContext";
+import ProfilePage from "./Pages/ProfilePage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/todos" element={<TodolistPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </UserContextProvider>
     </div>
