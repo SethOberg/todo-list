@@ -34,10 +34,11 @@ const LoginForm = () => {
         "http://localhost:8080/person",
         requestOptions
       );
-      const result = await response.text();
-      console.log(result);
+      console.log(response);
       if (response.ok) {
+        const result = await response.json();
         snackbarRef.current.openSnackbar("User added!", "success");
+        updateData(result);
         navigate("/todos");
       } else {
         snackbarRef.current.openSnackbar("Error adding user", "error");
@@ -59,9 +60,9 @@ const LoginForm = () => {
         `http://localhost:8080/person/getByName/${name}`,
         requestOptions
       );
-      const result = await response.text();
-      console.log(result);
+      console.log(response);
       if (response.ok) {
+        const result = await response.json();
         snackbarRef.current.openSnackbar("User found", "success");
         updateData(result);
         console.log(data);
