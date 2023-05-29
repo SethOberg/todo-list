@@ -7,13 +7,15 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const [data, setData] = useState(null);
 
+  const isAuthenticated = data !== null;
+
   // Define functions to update the data
   const updateData = (newData) => {
     setData(newData);
   };
 
   return (
-    <UserContext.Provider value={{ data, updateData }}>
+    <UserContext.Provider value={{ data, updateData, isAuthenticated }}>
       {children}
     </UserContext.Provider>
   );

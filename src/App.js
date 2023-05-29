@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
 import SignUpPage from "./Pages/SignUpPage";
@@ -6,6 +7,7 @@ import TodolistPage from "./Pages/TodolistPage";
 import Header from "./Components/Header";
 import { UserContextProvider } from "./Contexts/UserContext";
 import ProfilePage from "./Pages/ProfilePage";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
@@ -16,7 +18,14 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/todos" element={<TodolistPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </UserContextProvider>
     </div>
