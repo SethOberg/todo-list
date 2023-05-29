@@ -16,6 +16,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { UserContext } from "../Contexts/UserContext";
+import "../styles/Header.css";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -43,7 +44,9 @@ const Header = () => {
     <AppBar position="static" sx={{ bgcolor: "#81431a" }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         <Typography variant="h6" component="div">
-          TodoList
+          <Link id="headerTitle" to="/">
+            Todolist
+          </Link>
         </Typography>
         <IconButton
           size="large"
