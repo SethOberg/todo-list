@@ -15,6 +15,7 @@ const LoginPage = () => {
         Not already a user? <br />
         <Link to="/signup">Create an account</Link>{" "}
       </p>
+
       {/* <div class="box"></div> */}
     </div>
   );
