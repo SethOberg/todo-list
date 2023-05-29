@@ -5,18 +5,40 @@ import { Grid, Button } from "@mui/material";
 import "../styles/Profile.css";
 
 const ProfilePage = () => {
-  const { data } = useContext(UserContext);
+  const { data, updateData } = useContext(UserContext);
 
   function printName() {
     console.log(data);
   }
 
   const logOutUser = () => {
-    console.log("Log out user");
+    updateData(null);
   };
 
-  const removeUser = () => {
+  const removeUser = async () => {
     console.log("Remove user");
+
+    const requestOptions = {
+      method: "DELETE",
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/person/${data.uuid}`,
+        requestOptions
+      );
+      const result = await response.text();
+      console.log(result);
+
+      if (response.ok) {
+        updateData(null);
+        console.log("Successfully logged out");
+      }
+    } catch (error) {
+      console.log("error", error);
+      console.log("could not log out");
+    }
   };
 
   return (
