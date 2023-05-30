@@ -1,10 +1,51 @@
-import { Button, Grid, IconButton } from "@mui/material";
+import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import "../styles/TodoListPage.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 const TodolistPage = () => {
+  const accordionStyle = {
+    background: "#eee",
+    border: "1px solid #ccc",
+    marginBottom: "10px",
+    boxShadow: "none",
+    borderRadius: "5px",
+    textTransform: "capitalize",
+  };
+
+  const listItemStyle = {
+    background: "#eee",
+    border: "1px solid #ccc",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "10px",
+    borderRadius: "5px",
+  };
+
+  const accordionDetailsFooterStyle = {
+    display: "flex",
+    justifyContent: "flex-start",
+    marginTop: "10px",
+  };
+
   const { data, updateData } = useContext(UserContext);
 
   useEffect(() => {
@@ -55,35 +96,44 @@ const TodolistPage = () => {
     <div>
       <p>My todo lists</p>
 
-      <ul id="todolists">
-        {data.todoLists.map((todolist) => (
-          <li>
-            <Grid container alignItems="center">
-              <Grid item xs>
-                {todolist.name}
-              </Grid>
-              <Grid item>
-                <IconButton onClick={() => handleExpandClick(todolist.id)}>
-                  <ExpandMoreIcon />
+      <div>
+        {data.todoLists.map((todoList) => (
+          <Accordion key={todoList.uuid} style={accordionStyle}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>{todoList.name}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <List>
+                {todoList.todoListItems.map((todoItem) => (
+                  <ListItem key={todoItem.id} style={listItemStyle}>
+                    <ListItemText primary={todoItem.todoDescription} />
+                    <IconButton aria-label="Check">
+                      <RadioButtonUncheckedIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Remove"
+                      style={{ color: "#a53817" }}
+                    >
+                      <RemoveCircleIcon />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </List>
+              <div style={accordionDetailsFooterStyle}>
+                <IconButton aria-label="Add" style={{ color: "#0c7936" }}>
+                  <AddCircleIcon />
                 </IconButton>
-              </Grid>
-            </Grid>
-          </li>
-          // <li key={todolist.id}>
-          //   {todolist.name}
-          //   <IconButton onClick={() => handleExpandClick(todolist.id)}>
-          //     <ExpandMoreIcon />
-          //   </IconButton>
-          // </li>
+                <IconButton aria-label="CheckAll">
+                  <RadioButtonUncheckedIcon />
+                </IconButton>
+                <IconButton aria-label="RemoveAll" style={{ color: "#a53817" }}>
+                  <RemoveCircleIcon />
+                </IconButton>
+              </div>
+            </AccordionDetails>
+          </Accordion>
         ))}
-      </ul>
-
-      {/* <Button variant="contained" color="primary" onClick={checkData}>
-        Check data
-      </Button>
-      <Button variant="contained" color="primary" onClick={addNewTodoList}>
-        Create new
-      </Button> */}
+      </div>
 
       <Grid container direction="column" spacing={2}>
         <Grid item>
