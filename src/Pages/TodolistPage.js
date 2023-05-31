@@ -1,6 +1,5 @@
 import {
   Accordion,
-  AccordionActions,
   AccordionDetails,
   AccordionSummary,
   Button,
@@ -19,16 +18,22 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { styled } from "@mui/system";
 
 const TodolistPage = () => {
-  const accordionStyle = {
-    background: "#eee",
-    border: "1px solid #ccc",
-    marginBottom: "10px",
-    boxShadow: "none",
-    borderRadius: "5px",
-    textTransform: "capitalize",
-  };
+  // const accordionStyle = {
+  //   background: "#eee",
+  //   border: "1px solid #ccc",
+  //   marginBottom: "10px",
+  //   boxShadow: "none",
+  //   "&:before": {
+  //     display: "none",
+  //   },
+  //   borderRadius: "5px",
+  //   textTransform: "capitalize",
+  // };
+
+  const accordionSummaryStyle = {};
 
   const listItemStyle = {
     background: "#eee",
@@ -45,6 +50,10 @@ const TodolistPage = () => {
     justifyContent: "flex-start",
     marginTop: "10px",
   };
+
+  const CustomAccordionDetails = styled(AccordionSummary)`
+    border: 1px solid red;
+  `;
 
   const { data, updateData } = useContext(UserContext);
 
@@ -98,8 +107,26 @@ const TodolistPage = () => {
 
       <div>
         {data.todoLists.map((todoList) => (
-          <Accordion key={todoList.uuid} style={accordionStyle}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Accordion
+            key={todoList.uuid}
+            // style={accordionStyle}
+            sx={{
+              "& .MuiAccordion-root": { border: "none" },
+              background: "#eee",
+              border: "1px solid #ccc",
+              marginBottom: "10px",
+              boxShadow: "none",
+              "&:before": {
+                display: "none",
+              },
+              borderRadius: "5px",
+              textTransform: "capitalize",
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              style={accordionSummaryStyle}
+            >
               <Typography>{todoList.name}</Typography>
             </AccordionSummary>
             <AccordionDetails>
