@@ -164,11 +164,6 @@ const TodolistPage = () => {
 
       <Grid container direction="column" spacing={2}>
         <Grid item>
-          <Button variant="contained" color="primary" onClick={checkData}>
-            Check data
-          </Button>
-        </Grid>
-        <Grid item>
           <Button variant="contained" color="primary" onClick={addNewTodoList}>
             Create new
           </Button>
