@@ -134,7 +134,8 @@ const TodolistPage = () => {
     console.log("Todo, add new item");
   };
 
-  const markTodolistCompleted = () => {
+  const markTodolistCompleted = (todolistId) => {
+    console.log("Todo list id: " + todolistId);
     console.log("Todo, mark todolist completed");
     console.log("Data stored: " + data.name);
   };
@@ -147,9 +148,59 @@ const TodolistPage = () => {
     console.log("Todo, mark todolist item completed");
   };
 
-  const removeTodoListItem = () => {
+  const removeTodoListItem = (todoItemId) => {
     console.log("Todo, remove todolist item");
+    removeTodoListItemRequest(todoItemId);
   };
+
+  async function removeTodoListItemRequest(id) {
+    try {
+      // Define the URL for the DELETE request
+      const url = `http://localhost:8080/todolistitems/${id}`;
+
+      // Configure the request options
+      const requestOptions = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any other headers your API requires
+        },
+      };
+
+      // Use "await" to make the DELETE request and wait for the response
+      const response = await fetch(url, requestOptions);
+
+      // Check if the response status is OK (usually 200 for successful DELETE)
+      if (response.ok) {
+        // The todo list item has been successfully deleted
+        console.log(`Todo list item with ID ${id} has been deleted.`);
+        snackbarRef.current.openSnackbar("Todo item removed", "success");
+
+        const updatedData = {
+          ...data,
+          todoLists: data.todoLists.map((todoList) => ({
+            ...todoList,
+            todoListItems: todoList.todoListItems.filter(
+              (item) => item.id !== id
+            ),
+          })),
+        };
+
+        updateData(updatedData);
+
+        // Perform any additional actions if needed
+      } else {
+        // Handle the case when the response status is not OK
+        console.error(`Failed to delete todo list item with ID ${id}.`);
+        // Handle the error, e.g., show an error message to the user
+        snackbarRef.current.openSnackbar("Could not remove item", "error");
+      }
+    } catch (error) {
+      // Handle any network or other errors
+      console.error("Error:", error);
+      snackbarRef.current.openSnackbar("Something went wrong", "error");
+    }
+  }
 
   return (
     <div>
@@ -186,14 +237,14 @@ const TodolistPage = () => {
                     <ListItemText primary={todoItem.todoDescription} />
                     <IconButton
                       aria-label="Check"
-                      onClick={markTodolistItemCompleted}
+                      onClick={markTodolistItemCompleted(todoItem.id)}
                     >
                       <RadioButtonUncheckedIcon />
                     </IconButton>
                     <IconButton
                       aria-label="Remove"
                       style={{ color: "#a53817" }}
-                      onClick={removeTodoListItem}
+                      onClick={() => removeTodoListItem(todoItem.id)}
                     >
                       <RemoveCircleIcon />
                     </IconButton>
@@ -210,7 +261,7 @@ const TodolistPage = () => {
                 </IconButton>
                 <IconButton
                   aria-label="CheckAll"
-                  onClick={markTodolistCompleted}
+                  onClick={() => markTodolistCompleted(todoList.id)}
                 >
                   <RadioButtonUncheckedIcon />
                 </IconButton>
