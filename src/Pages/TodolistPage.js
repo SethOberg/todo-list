@@ -1,10 +1,60 @@
-import { Button, Grid, IconButton } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import "../styles/TodoListPage.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { styled } from "@mui/system";
 
 const TodolistPage = () => {
+  // const accordionStyle = {
+  //   background: "#eee",
+  //   border: "1px solid #ccc",
+  //   marginBottom: "10px",
+  //   boxShadow: "none",
+  //   "&:before": {
+  //     display: "none",
+  //   },
+  //   borderRadius: "5px",
+  //   textTransform: "capitalize",
+  // };
+
+  const accordionSummaryStyle = {};
+
+  const listItemStyle = {
+    background: "#eee",
+    border: "1px solid #ccc",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "10px",
+    borderRadius: "5px",
+  };
+
+  const accordionDetailsFooterStyle = {
+    display: "flex",
+    justifyContent: "flex-start",
+    marginTop: "10px",
+  };
+
+  const CustomAccordionDetails = styled(AccordionSummary)`
+    border: 1px solid red;
+  `;
+
   const { data, updateData } = useContext(UserContext);
 
   useEffect(() => {
@@ -51,46 +101,103 @@ const TodolistPage = () => {
     console.log("Clicked todo list ID:", id);
   };
 
+  const addNewTodoListItem = () => {
+    console.log("Todo, add new item");
+  };
+
+  const markTodolistCompleted = () => {
+    console.log("Todo, mark todolist completed");
+  };
+
+  const removeTodoList = () => {
+    console.log("Todo, remove todolist");
+  };
+
+  const markTodolistItemCompleted = () => {
+    console.log("Todo, mark todolist item completed");
+  };
+
+  const removeTodoListItem = () => {
+    console.log("Todo, remove todolist item");
+  };
+
   return (
     <div>
       <p>My todo lists</p>
 
-      <ul id="todolists">
-        {data.todoLists.map((todolist) => (
-          <li>
-            <Grid container alignItems="center">
-              <Grid item xs>
-                {todolist.name}
-              </Grid>
-              <Grid item>
-                <IconButton onClick={() => handleExpandClick(todolist.id)}>
-                  <ExpandMoreIcon />
+      <div>
+        {data.todoLists.map((todoList) => (
+          <Accordion
+            key={todoList.uuid}
+            // style={accordionStyle}
+            sx={{
+              "& .MuiAccordion-root": { border: "none" },
+              background: "#eee",
+              border: "1px solid #ccc",
+              marginBottom: "10px",
+              boxShadow: "none",
+              "&:before": {
+                display: "none",
+              },
+              borderRadius: "5px",
+              textTransform: "capitalize",
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              style={accordionSummaryStyle}
+            >
+              <Typography>{todoList.name}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <List>
+                {todoList.todoListItems.map((todoItem) => (
+                  <ListItem key={todoItem.id} style={listItemStyle}>
+                    <ListItemText primary={todoItem.todoDescription} />
+                    <IconButton
+                      aria-label="Check"
+                      onClick={markTodolistItemCompleted}
+                    >
+                      <RadioButtonUncheckedIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Remove"
+                      style={{ color: "#a53817" }}
+                      onClick={removeTodoListItem}
+                    >
+                      <RemoveCircleIcon />
+                    </IconButton>
+                  </ListItem>
+                ))}
+              </List>
+              <div style={accordionDetailsFooterStyle}>
+                <IconButton
+                  aria-label="Add"
+                  style={{ color: "#0c7936" }}
+                  onClick={addNewTodoListItem}
+                >
+                  <AddCircleIcon />
                 </IconButton>
-              </Grid>
-            </Grid>
-          </li>
-          // <li key={todolist.id}>
-          //   {todolist.name}
-          //   <IconButton onClick={() => handleExpandClick(todolist.id)}>
-          //     <ExpandMoreIcon />
-          //   </IconButton>
-          // </li>
+                <IconButton
+                  aria-label="CheckAll"
+                  onClick={markTodolistCompleted}
+                >
+                  <RadioButtonUncheckedIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="RemoveAll"
+                  style={{ color: "#a53817" }}
+                  onClick={removeTodoList}
+                >
+                  <RemoveCircleIcon />
+                </IconButton>
+              </div>
+            </AccordionDetails>
+          </Accordion>
         ))}
-      </ul>
-
-      {/* <Button variant="contained" color="primary" onClick={checkData}>
-        Check data
-      </Button>
-      <Button variant="contained" color="primary" onClick={addNewTodoList}>
-        Create new
-      </Button> */}
+      </div>
 
       <Grid container direction="column" spacing={2}>
-        <Grid item>
-          <Button variant="contained" color="primary" onClick={checkData}>
-            Check data
-          </Button>
-        </Grid>
         <Grid item>
           <Button variant="contained" color="primary" onClick={addNewTodoList}>
             Create new
