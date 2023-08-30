@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 
-function AddTodoItemDialog({ open, onClose, onAdd, todoListId }) {
+function AddTodoItemDialog({ snackbar, open, onClose, onAdd, todoListId }) {
   const [todoDescription, setTodoDescription] = useState("");
 
   const handleAddClick = () => {
@@ -18,15 +18,46 @@ function AddTodoItemDialog({ open, onClose, onAdd, todoListId }) {
       return;
     }
 
-    // Call the onAdd function with the todoDescription and todoListId
-    onAdd(todoDescription, todoListId);
-
-    // Clear the input field
-    setTodoDescription("");
-
-    // Close the dialog
-    onClose();
+    addTodoListItem(todoListId, todoDescription, false);
   };
+
+  async function addTodoListItem(todoListId, todoDescription, completed) {
+    const apiUrl = `http://localhost:8080/todolists/addTodoListItem/${todoListId}`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          todoDescription,
+          completed,
+        }),
+      });
+
+      if (!response.ok) {
+        snackbar.current.openSnackbar("Error occurred, input not ok?", "error");
+        throw new Error(`Failed to add todo list item: ${response.status}`);
+      } else if (response.ok) {
+        snackbar.current.openSnackbar("Todolist item added", "success");
+        // Call the onAdd function with the todoDescription and todoListId
+        onAdd(todoDescription, todoListId);
+        // Clear the input field
+        setTodoDescription("");
+        // Close the dialog
+        onClose();
+      }
+
+      // You can handle the response data here if needed
+      const data = await response.json();
+      return data; // or do something with the response data
+    } catch (error) {
+      console.error("Error adding todo list item:", error);
+      snackbar.current.openSnackbar("Error occurred", "error");
+      // Handle the error appropriately, e.g., show a message to the user
+    }
+  }
 
   return (
     <Dialog open={open} onClose={onClose}>

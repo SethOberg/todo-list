@@ -310,6 +310,7 @@ const TodolistPage = () => {
       />
       <SnackBarComponent ref={snackbarRef} />
       <AddTodoItemDialog
+        snackbar={snackbarRef}
         open={dialogTodoItemOpen}
         onClose={() => setDialogTodoItemOpen(false)}
         onAdd={handleAddNewTodoItem}
