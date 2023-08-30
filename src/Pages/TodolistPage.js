@@ -10,7 +10,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import "../styles/TodoListPage.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -19,6 +19,7 @@ import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { styled } from "@mui/system";
+import TodoDialog from "../Components/TodoDialog";
 
 const TodolistPage = () => {
   // const accordionStyle = {
@@ -32,6 +33,20 @@ const TodolistPage = () => {
   //   borderRadius: "5px",
   //   textTransform: "capitalize",
   // };
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [todoName, setTodoName] = useState("");
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleTodoCreate = (name) => {
+    setTodoName(name);
+  };
 
   const accordionSummaryStyle = {};
 
@@ -107,6 +122,7 @@ const TodolistPage = () => {
 
   const markTodolistCompleted = () => {
     console.log("Todo, mark todolist completed");
+    console.log("Data stored: " + data.name);
   };
 
   const removeTodoList = () => {
@@ -199,11 +215,20 @@ const TodolistPage = () => {
 
       <Grid container direction="column" spacing={2}>
         <Grid item>
-          <Button variant="contained" color="primary" onClick={addNewTodoList}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleDialogOpen}
+          >
             Create new
           </Button>
         </Grid>
       </Grid>
+      <TodoDialog
+        open={dialogOpen}
+        onClose={handleDialogClose}
+        onCreate={handleTodoCreate}
+      />
     </div>
   );
 };
