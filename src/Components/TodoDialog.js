@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import TextField from "@mui/material/TextField";
 import { UserContext } from "../Contexts/UserContext";
 
-function TodoDialog({ open, onClose, onCreate }) {
+function TodoDialog({ snackbar, open, onClose, onCreate }) {
   const [todoName, setTodoName] = useState("");
   const { data, updateData } = useContext(UserContext);
 
@@ -51,18 +51,21 @@ function TodoDialog({ open, onClose, onCreate }) {
       // Check if the response status is OK (usually 200)
       if (response.ok) {
         // Parse the response data as JSON
-        // const responseData = await response.json();
-        // console.log("PUT request successful:", responseData);
+        const responseData = await response.json();
+        console.log("PUT request successful:", responseData);
+        updateData(responseData);
         // Do something with the successful response data
+        snackbar.current.openSnackbar("Todolist added", "success");
       } else {
         // Handle the case when the response status is not OK
         console.error("PUT request failed with status:", response.status);
-
+        snackbar.current.openSnackbar("Error adding todolist", "error");
         // Handle the error, e.g., show an error message to the user
       }
     } catch (error) {
       // Handle any network or other errors
       console.error("Error:", error);
+      snackbar.current.openSnackbar("Something went wrong", "error");
     }
   }
 

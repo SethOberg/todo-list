@@ -10,7 +10,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../Contexts/UserContext";
 import "../styles/TodoListPage.css";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -20,6 +20,8 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { styled } from "@mui/system";
 import TodoDialog from "../Components/TodoDialog";
+import SnackBarComponent from "../Components/SnackBarComponent";
+import { SnackbarSeverity } from "../Const/SnackbarSeverity";
 
 const TodolistPage = () => {
   // const accordionStyle = {
@@ -35,6 +37,18 @@ const TodolistPage = () => {
   // };
   const [dialogOpen, setDialogOpen] = useState(false);
   const [todoName, setTodoName] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const snackbarRef = useRef(null);
+
+  const handleOpenSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -225,10 +239,12 @@ const TodolistPage = () => {
         </Grid>
       </Grid>
       <TodoDialog
+        snackbar={snackbarRef}
         open={dialogOpen}
         onClose={handleDialogClose}
         onCreate={handleTodoCreate}
       />
+      <SnackBarComponent ref={snackbarRef} />
     </div>
   );
 };
