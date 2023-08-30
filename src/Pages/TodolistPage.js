@@ -22,6 +22,7 @@ import { styled } from "@mui/system";
 import TodoDialog from "../Components/TodoDialog";
 import SnackBarComponent from "../Components/SnackBarComponent";
 import { SnackbarSeverity } from "../Const/SnackbarSeverity";
+import AddTodoItemDialog from "../Components/AddTodoItemDialog";
 
 const TodolistPage = () => {
   // const accordionStyle = {
@@ -36,10 +37,20 @@ const TodolistPage = () => {
   //   textTransform: "capitalize",
   // };
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogTodoItemOpen, setDialogTodoItemOpen] = useState(false);
   const [todoName, setTodoName] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const snackbarRef = useRef(null);
+  const [selectedId, setSelectedId] = useState("");
+
+  const handleAddNewTodoItem = (todoDescription, todoListId) => {
+    console.log(
+      `Adding todo item '${todoDescription}' to todo list with ID ${todoListId}`
+    );
+
+    setDialogTodoItemOpen(false);
+  };
 
   const handleOpenSnackbar = (message) => {
     setSnackbarMessage(message);
@@ -130,8 +141,10 @@ const TodolistPage = () => {
     console.log("Clicked todo list ID:", id);
   };
 
-  const addNewTodoListItem = () => {
+  const addNewTodoListItem = (todolistId) => {
+    setSelectedId(todolistId);
     console.log("Todo, add new item");
+    setDialogTodoItemOpen(true);
   };
 
   const markTodolistCompleted = (todolistId) => {
@@ -255,7 +268,7 @@ const TodolistPage = () => {
                 <IconButton
                   aria-label="Add"
                   style={{ color: "#0c7936" }}
-                  onClick={addNewTodoListItem}
+                  onClick={() => addNewTodoListItem(todoList.id)}
                 >
                   <AddCircleIcon />
                 </IconButton>
@@ -296,6 +309,12 @@ const TodolistPage = () => {
         onCreate={handleTodoCreate}
       />
       <SnackBarComponent ref={snackbarRef} />
+      <AddTodoItemDialog
+        open={dialogTodoItemOpen}
+        onClose={() => setDialogTodoItemOpen(false)}
+        onAdd={handleAddNewTodoItem}
+        todoListId={selectedId}
+      />
     </div>
   );
 };
