@@ -101,6 +101,26 @@ const TodolistPage = () => {
     console.log("Clicked todo list ID:", id);
   };
 
+  const addNewTodoListItem = () => {
+    console.log("Todo, add new item");
+  };
+
+  const markTodolistCompleted = () => {
+    console.log("Todo, mark todolist completed");
+  };
+
+  const removeTodoList = () => {
+    console.log("Todo, remove todolist");
+  };
+
+  const markTodolistItemCompleted = () => {
+    console.log("Todo, mark todolist item completed");
+  };
+
+  const removeTodoListItem = () => {
+    console.log("Todo, remove todolist item");
+  };
+
   return (
     <div>
       <p>My todo lists</p>
@@ -134,12 +154,16 @@ const TodolistPage = () => {
                 {todoList.todoListItems.map((todoItem) => (
                   <ListItem key={todoItem.id} style={listItemStyle}>
                     <ListItemText primary={todoItem.todoDescription} />
-                    <IconButton aria-label="Check">
+                    <IconButton
+                      aria-label="Check"
+                      onClick={markTodolistItemCompleted}
+                    >
                       <RadioButtonUncheckedIcon />
                     </IconButton>
                     <IconButton
                       aria-label="Remove"
                       style={{ color: "#a53817" }}
+                      onClick={removeTodoListItem}
                     >
                       <RemoveCircleIcon />
                     </IconButton>
@@ -147,13 +171,24 @@ const TodolistPage = () => {
                 ))}
               </List>
               <div style={accordionDetailsFooterStyle}>
-                <IconButton aria-label="Add" style={{ color: "#0c7936" }}>
+                <IconButton
+                  aria-label="Add"
+                  style={{ color: "#0c7936" }}
+                  onClick={addNewTodoListItem}
+                >
                   <AddCircleIcon />
                 </IconButton>
-                <IconButton aria-label="CheckAll">
+                <IconButton
+                  aria-label="CheckAll"
+                  onClick={markTodolistCompleted}
+                >
                   <RadioButtonUncheckedIcon />
                 </IconButton>
-                <IconButton aria-label="RemoveAll" style={{ color: "#a53817" }}>
+                <IconButton
+                  aria-label="RemoveAll"
+                  style={{ color: "#a53817" }}
+                  onClick={removeTodoList}
+                >
                   <RemoveCircleIcon />
                 </IconButton>
               </div>
