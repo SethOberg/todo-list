@@ -49,8 +49,38 @@ const TodolistPage = () => {
       `Adding todo item '${todoDescription}' to todo list with ID ${todoListId}`
     );
 
+    fetchPersonById(data.uuid);
+
     setDialogTodoItemOpen(false);
   };
+
+  async function fetchPersonById(id) {
+    const requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/person/${id}`,
+        requestOptions
+      );
+      console.log(response);
+      if (response.ok) {
+        const result = await response.json();
+        //snackbarRef.current.openSnackbar("User found", "success");
+        updateData(result);
+        console.log(data);
+        //navigate("/todos");
+      } else {
+        //snackbarRef.current.openSnackbar("User not found", "error");
+        //postData();
+      }
+    } catch (error) {
+      console.log("error", error);
+      //snackbarRef.current.openSnackbar("Error occurred", "error");
+    }
+  }
 
   const handleOpenSnackbar = (message) => {
     setSnackbarMessage(message);
