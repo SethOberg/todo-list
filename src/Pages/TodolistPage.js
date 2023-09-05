@@ -187,9 +187,45 @@ const TodolistPage = () => {
     console.log("Todo, remove todolist");
   };
 
-  const markTodolistItemCompleted = () => {
-    console.log("Todo, mark todolist item completed");
+  const removeLater = (id) => {
+    markTodolistCompleted(id);
   };
+
+  async function markTodolistItemCompleted(todolistItemId) {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/todolistitems/${todolistItemId}`,
+        {
+          method: "PUT",
+        }
+      );
+
+      // Check if the response status is in the 200-299 range for success
+      if (!response.ok) {
+        snackbarRef.current.openSnackbar("Failed to update", "error");
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      fetchPersonById(data.uuid);
+      //const responseData = await response.json();
+
+      //console.log(responseData);
+
+      snackbarRef.current.openSnackbar(
+        "Todo item updated successfully",
+        "success"
+      );
+
+      // Request succeeded
+      console.log(
+        `Todo list item with ID ${todolistItemId} has been updated successfully.`
+      );
+    } catch (error) {
+      console.error("Error:", error);
+      snackbarRef.current.openSnackbar("Error occurred", "error");
+      throw error; // Rethrow the error for handling at a higher level if needed
+    }
+  }
 
   const removeTodoListItem = (todoItemId) => {
     console.log("Todo, remove todolist item");
@@ -280,9 +316,14 @@ const TodolistPage = () => {
                     <ListItemText primary={todoItem.todoDescription} />
                     <IconButton
                       aria-label="Check"
-                      onClick={markTodolistItemCompleted(todoItem.id)}
+                      onClick={() => markTodolistItemCompleted(todoItem.id)}
                     >
-                      <RadioButtonUncheckedIcon />
+                      {/* <RadioButtonUncheckedIcon /> */}
+                      {todoItem.completed ? (
+                        <CheckCircleOutlineIcon style={{ color: "green" }} />
+                      ) : (
+                        <RadioButtonUncheckedIcon />
+                      )}
                     </IconButton>
                     <IconButton
                       aria-label="Remove"
