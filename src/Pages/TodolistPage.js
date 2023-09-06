@@ -216,8 +216,30 @@ const TodolistPage = () => {
     }
   }
 
-  const removeTodoList = () => {
-    console.log("Todo, remove todolist");
+  const removeTodoList = async (todolistId) => {
+    const url = `http://localhost:8080/todolists/${todolistId}`;
+
+    try {
+      const response = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json", // Set the appropriate content type if needed
+          // You can add any additional headers here if required
+        },
+      });
+
+      if (response.ok) {
+        console.log(`Todo, remove todolist with id: ${todolistId} - Success`);
+        snackbarRef.current.openSnackbar("Todo list removed", "success");
+        fetchPersonById(data.uuid);
+      } else {
+        console.error(`Error removing todolist with id: ${todolistId}`);
+        snackbarRef.current.openSnackbar("Error removing todolist", "error");
+      }
+    } catch (error) {
+      console.error(`An error occurred: ${error}`);
+      snackbarRef.current.openSnackbar("Error occurred", "error");
+    }
   };
 
   const removeLater = (id) => {
@@ -389,7 +411,7 @@ const TodolistPage = () => {
                 <IconButton
                   aria-label="RemoveAll"
                   style={{ color: "#a53817" }}
-                  onClick={removeTodoList}
+                  onClick={() => removeTodoList(todoList.id)}
                 >
                   <RemoveCircleIcon />
                 </IconButton>
