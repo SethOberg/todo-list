@@ -177,11 +177,44 @@ const TodolistPage = () => {
     setDialogTodoItemOpen(true);
   };
 
-  const markTodolistCompleted = (todolistId) => {
-    console.log("Todo list id: " + todolistId);
-    console.log("Todo, mark todolist completed");
-    console.log("Data stored: " + data.name);
-  };
+  // const markTodolistCompleted = (todolistId) => {
+  //   console.log("Todo list id: " + todolistId);
+  //   console.log("Todo, mark todolist completed");
+  //   console.log("Data stored: " + data.name);
+  // };
+
+  async function markTodolistCompleted(todolistId) {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/todolists/complete/${todolistId}`,
+        {
+          method: "PUT",
+        }
+      );
+
+      // Check if the response status is in the 200-299 range for success
+      if (!response.ok) {
+        snackbarRef.current.openSnackbar("Failed to update", "error");
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      fetchPersonById(data.uuid);
+
+      snackbarRef.current.openSnackbar(
+        "Todo list marked as completed",
+        "success"
+      );
+
+      // Request succeeded
+      console.log(
+        `Todo list with ID ${todolistId} has been updated successfully.`
+      );
+    } catch (error) {
+      console.error("Error:", error);
+      snackbarRef.current.openSnackbar("Error occurred", "error");
+      throw error; // Rethrow the error for handling at a higher level if needed
+    }
+  }
 
   const removeTodoList = () => {
     console.log("Todo, remove todolist");
@@ -347,7 +380,11 @@ const TodolistPage = () => {
                   aria-label="CheckAll"
                   onClick={() => markTodolistCompleted(todoList.id)}
                 >
-                  <RadioButtonUncheckedIcon />
+                  {todoList.completed ? (
+                    <CheckCircleOutlineIcon style={{ color: "green" }} />
+                  ) : (
+                    <RadioButtonUncheckedIcon />
+                  )}
                 </IconButton>
                 <IconButton
                   aria-label="RemoveAll"
